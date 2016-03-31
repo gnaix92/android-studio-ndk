@@ -9,7 +9,7 @@ model {
 
         defaultConfig.with {
             applicationId = "com.example.gnaix.ndk"
-            minSdkVersion.apiLevel = 15
+            minSdkVersion.apiLevel = 14
             targetSdkVersion.apiLevel = 22
             versionCode = 1
             versionName = "1.0"
@@ -25,7 +25,7 @@ model {
     }
     android.buildTypes {
         release {
-            minifyEnabled = false
+            minifyEnabled = true
             proguardFiles.add(file('proguard-rules.pro'))
             signingConfig = signConf
             ndk.with {
@@ -33,7 +33,7 @@ model {
             }
         }
         debug{
-            minifyEnabled = true
+            minifyEnabled = false
             proguardFiles.add(file('proguard-rules.pro'))
             ndk.with {
                 debuggable = true
@@ -90,5 +90,5 @@ model {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
 }

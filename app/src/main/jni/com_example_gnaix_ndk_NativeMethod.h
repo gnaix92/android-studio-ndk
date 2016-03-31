@@ -15,6 +15,46 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_com_example_gnaix_ndk_NativeMethod_getInt
   (JNIEnv *, jclass, jint);
 
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    getString
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_example_gnaix_ndk_NativeMethod_getString
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    getByteArray
+ * Signature: ([B)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getByteArray
+  (JNIEnv *, jclass, jbyteArray);
+
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    invokeJobject
+ * Signature: (Ljava/lang/String;I)V
+ */
+JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeJobject
+  (JNIEnv *, jclass, jstring, jint);
+
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    invokeStaticFieldAndMethod
+ * Signature: (ILjava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeStaticFieldAndMethod
+  (JNIEnv *, jclass, jint, jstring);
+
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    getPersons
+ * Signature: ()[Lcom/example/gnaix/ndk/Person;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getPersons
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif
