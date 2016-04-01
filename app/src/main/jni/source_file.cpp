@@ -231,3 +231,71 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getPerson
     env->DeleteLocalRef(jobj);
     return obj_array;
 }
+
+JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_callSuperInstanceMethod
+        (JNIEnv *env, jclass jobj){
+    jclass cls_dog;
+    jclass cls_animal;
+    jmethodID mid_dog_init;
+    jmethodID mid_run;
+    jmethodID mid_get_name;
+    jstring c_str_name;
+    jobject obj_dog;
+    const char *name = NULL;
+
+    //1. 获取Dog类Class引用
+    cls_dog = env->FindClass("com/example/gnaix/ndk/Dog");
+    if(cls_dog == NULL){
+        LOGD("cls_dog null");
+        return;
+    }
+
+    //2. 获取Dog类构造方法ID
+    mid_dog_init = env->GetMethodID(cls_dog, "<init>", "(Ljava/lang/String;)V");
+    if(mid_dog_init == NULL){
+        LOGD("cls_dog init null");
+        return;
+    }
+
+    //3. 创建Dog对象实例
+    c_str_name = env->NewStringUTF("Tom");
+    obj_dog = env->NewObject(cls_dog, mid_dog_init, c_str_name);
+    if(obj_dog == NULL){
+        LOGD("obj_dog null");
+        return;
+    }
+
+    //4. 获取animal类Class引用
+    cls_animal = env->FindClass("com/example/gnaix/ndk/Animal");
+    if(cls_animal == NULL){
+        LOGD("cls_dog null");
+        return;
+    }
+
+    //5. 获取父类run方法ID并调用
+    mid_run = env->GetMethodID(cls_animal, "run", "()V");
+    if(mid_run == NULL){
+        LOGD("mid_run null");
+        return;
+    }
+    env->CallNonvirtualVoidMethod(obj_dog, cls_animal, mid_run);
+
+    //6. 调用父类getName方法
+    mid_get_name = env->GetMethodID(cls_animal, "getName", "()Ljava/lang/String;");
+    if(mid_get_name == NULL){
+        LOGD("mid_get_name null");
+        return;
+    }
+    c_str_name = (jstring) env->CallNonvirtualObjectMethod(obj_dog, cls_animal, mid_get_name);
+    name = env->GetStringUTFChars(c_str_name, 0);
+    LOGD("In C: Animal Name is %s", name);
+
+    //7. 释放从java层获取到的字符串所分配的内存
+    env->ReleaseStringUTFChars(c_str_name, name);
+
+    //8. 释放局部变量
+    env->DeleteLocalRef(cls_animal);
+    env->DeleteLocalRef(cls_dog);
+    env->DeleteLocalRef(c_str_name);
+    env->DeleteLocalRef(obj_dog);
+}

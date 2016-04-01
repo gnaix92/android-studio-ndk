@@ -52,4 +52,10 @@ public class NativeMethod {
      * @return
      */
     public static native Person[] getPersons();
+
+
+    /**
+     * 调用父类构造方法和实例方法
+     */
+    public static native void callSuperInstanceMethod();
 }

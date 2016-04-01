@@ -55,6 +55,14 @@ JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeStaticField
 JNIEXPORT jobjectArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getPersons
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_example_gnaix_ndk_NativeMethod
+ * Method:    callSuperInstanceMethod
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_callSuperInstanceMethod
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

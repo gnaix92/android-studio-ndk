@@ -43,5 +43,8 @@ public class MainActivity extends AppCompatActivity {
             person.toString();
         }
 
+        //调用父类构造方法和实例方法
+        NativeMethod.callSuperInstanceMethod();
+
     }
 }
