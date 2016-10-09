@@ -1,63 +1,63 @@
 apply plugin: 'com.android.model.application'
 
 model {
-    def signConf
+    //def signConf
 
     android {
-        compileSdkVersion = 23
-        buildToolsVersion = "23.0.2"
+        compileSdkVersion 23
+        buildToolsVersion "23.0.2"
 
-        defaultConfig.with {
-            applicationId = "com.example.gnaix.ndk"
-            minSdkVersion.apiLevel = 14
-            targetSdkVersion.apiLevel = 22
-            versionCode = 1
-            versionName = "1.0"
+        defaultConfig {
+            applicationId "com.example.gnaix.ndk"
+            minSdkVersion.apiLevel 14
+            targetSdkVersion.apiLevel 22
+            versionCode 1
+            versionName "1.0"
 
             buildConfigFields.with {
                 create() {
-                    type = "int"
-                    name = "VALUE"
-                    value = "1"
+                    type "int"
+                    name "VALUE"
+                    value "1"
                 }
             }
         }
     }
     android.buildTypes {
         release {
-            minifyEnabled = true
+            minifyEnabled true
             proguardFiles.add(file('proguard-rules.pro'))
-            signingConfig = signConf
+            //signingConfig signConf
             ndk.with {
-                debuggable = false
+                debuggable false
             }
         }
         debug{
-            minifyEnabled = false
+            minifyEnabled false
             proguardFiles.add(file('proguard-rules.pro'))
             ndk.with {
-                debuggable = true
+                debuggable true
             }
         }
     }
 
     android.signingConfigs {
         create("myConfig") {
-            keyAlias = 'gnaix'
-            keyPassword = '990828785'
-            storeFile = new File('/Users/xiangqing/Documents/workspace/android/gnaix.jks')
-            storePassword = '990828785'
-            storeType = "jks"
-            signConf = it
+            keyAlias 'gnaix'
+            keyPassword '990828785'
+            storeFile new File('/Users/xiangqing/Documents/workspace/android/gnaix.jks')
+            storePassword '990828785'
+            storeType "jks"
+            //signConf it
         }
     }
 
     android.ndk {
-        moduleName = "native"  //设置库(so)文件名称
-//        CFlags.add("-DCUSTOM_DEFINE")
+        moduleName "native"  //设置库(so)文件名称
+        CFlags.add("g")
         ldLibs.addAll(["log", "android", "EGL", "GLESv1_CM"])
 //        ldFlags.add("-L/custom/lib/path")
-        stl = "stlport_static"
+        stl "stlport_static"
     }
 
     android.productFlavors {

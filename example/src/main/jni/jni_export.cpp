@@ -2,26 +2,19 @@
 // Created by 薛祥清 on 16/3/10.
 //
 
-#include "com_example_gnaix_ndk_NativeMethod.h"
+#include "jni_export.h"
+#include "gutil.h"
 #include <android/log.h>
 #include <sys/system_properties.h>
 #include <string>
 
+
 using namespace std;
 
-#define ENABLE_DEBUG 1
-#if ENABLE_DEBUG
-#define TAG "NDK_NATIVE"
-#define LOGD(fmt, args...)  __android_log_print(ANDROID_LOG_DEBUG,TAG, fmt, ##args)
-#define DEBUG_PRINT(format, args...) \
-    LOGD(format, ##args)
-#else
-#define  DEBUG_PRINT(format, args...)
-#endif
-
-JNIEXPORT jint JNICALL Java_com_example_gnaix_ndk_NativeMethod_getInt
-        (JNIEnv *env, jclass object, jint num)
+JNIEXPORT jint JNICALL get_int(JNIEnv *env, jclass object, jint num)
 {
+
+    LOGD("-------------------------------");
     int len;
     char buf[1024];
     __system_property_get("ro.serialno", buf);
@@ -30,8 +23,8 @@ JNIEXPORT jint JNICALL Java_com_example_gnaix_ndk_NativeMethod_getInt
     return num + len;
 }
 
-JNIEXPORT jstring JNICALL Java_com_example_gnaix_ndk_NativeMethod_getString
-        (JNIEnv *env, jclass object, jstring str){
+JNIEXPORT jstring JNICALL get_string(JNIEnv *env, jclass object, jstring str)
+{
 
     //1. 将unicode编码的java字符串转换成C风格字符串
     const char *buf_name = env->GetStringUTFChars(str, 0);
@@ -54,8 +47,8 @@ JNIEXPORT jstring JNICALL Java_com_example_gnaix_ndk_NativeMethod_getString
     return env->NewStringUTF(result.c_str());
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getByteArray
-        (JNIEnv *env, jclass object, jbyteArray array){
+JNIEXPORT jbyteArray JNICALL get_byteArray(JNIEnv *env, jclass object, jbyteArray array)
+{
     //1. 获取数组指针和长度
     jbyte *array_body = env->GetByteArrayElements(array, 0);
     int len_body = env->GetArrayLength(array);
@@ -75,8 +68,8 @@ JNIEXPORT jbyteArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getByteArra
     return result;
 }
 
-JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeJobject
-        (JNIEnv *env, jclass object, jstring name, jint age){
+JNIEXPORT void JNICALL invoke_Jobject(JNIEnv *env, jclass object, jstring name, jint age)
+{
     jclass clazz = NULL;
     jobject jobj = NULL;
     jfieldID fid_name = NULL;
@@ -136,8 +129,8 @@ JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeJobject
 }
 
 
-JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeStaticFieldAndMethod
-        (JNIEnv *env, jclass object, jint age, jstring name){
+JNIEXPORT void JNICALL invoke_static_fieldAndMethod(JNIEnv *env, jclass object, jint age, jstring name)
+{
 
     jclass clazz = NULL;
     jfieldID fid = NULL;
@@ -179,8 +172,8 @@ JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_invokeStaticField
     env->DeleteLocalRef(j_result);
 }
 
-JNIEXPORT jobjectArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getPersons
-        (JNIEnv *env, jclass object){
+JNIEXPORT jobjectArray JNICALL get_persons(JNIEnv *env, jclass object)
+{
     jclass clazz = NULL;
     jobject jobj = NULL;
     jmethodID mid_construct = NULL;
@@ -232,8 +225,8 @@ JNIEXPORT jobjectArray JNICALL Java_com_example_gnaix_ndk_NativeMethod_getPerson
     return obj_array;
 }
 
-JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_callSuperInstanceMethod
-        (JNIEnv *env, jclass jobj){
+JNIEXPORT void JNICALL call_superInstance_method(JNIEnv *env, jclass jobj)
+{
     jclass cls_dog;
     jclass cls_animal;
     jmethodID mid_dog_init;
@@ -298,4 +291,30 @@ JNIEXPORT void JNICALL Java_com_example_gnaix_ndk_NativeMethod_callSuperInstance
     env->DeleteLocalRef(cls_dog);
     env->DeleteLocalRef(c_str_name);
     env->DeleteLocalRef(obj_dog);
+}
+
+
+//动态注册
+JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)
+{
+    if (JNI_OK != vm->GetEnv((void **) &g_env, JNI_VERSION_1_6)) {
+        return -1;
+    }
+    LOGD("JNI_OnLoad()");
+    native_class = g_env->FindClass("com/example/gnaix/ndk/NativeMethod");
+    if (JNI_OK == g_env->RegisterNatives(native_class, methods, NELEM(methods))) {
+        LOGD("RegisterNatives() --> success");
+    } else {
+        LOGE("RegisterNatives() --> failed");
+        return -1;
+    }
+    return JNI_VERSION_1_6;
+}
+
+//注销
+void JNI_OnUnLoad(JavaVM *vm, void *reserved)
+{
+    LOGD("JNI_OnUnLoad()");
+    g_env->UnregisterNatives(native_class);
+    LOGD("UnregisterNatives()");
 }

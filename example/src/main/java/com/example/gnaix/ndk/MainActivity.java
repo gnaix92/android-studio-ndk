@@ -18,9 +18,11 @@ public class MainActivity extends AppCompatActivity {
         int len = NativeMethod.getInt(0);
         Log.d(TAG, "serialno length:" + len);
 
+
         //调用String类型
         String str = NativeMethod.getString("ro.serialno");
         Log.d(TAG, "serialno : " + str);
+
 
         //调用数组
         byte array[] = {'A', 'B', 'C', 'D', 'E'};
@@ -29,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "ARRAY : " + array[i] + "->" + resutl[i]);
         }
 
+
         //调用静态方法/变量
         NativeMethod.invokeStaticFieldAndMethod(23, "gnaix");
         Log.d(TAG, "field value:" + Util.STATIC_FIELD);
+
 
         //调用实例方法/变量
         NativeMethod.invokeJobject("gnaix", 23);
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         for(Person person : persons){
             person.toString();
         }
+
 
         //调用父类构造方法和实例方法
         NativeMethod.callSuperInstanceMethod();
