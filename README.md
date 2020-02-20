@@ -7,4 +7,3 @@
 - [JNI基本数据和字符串处理](http://gnaixx.cc/2016/04/06/ndk-base_types-string/)
 - [JNI数组数据处理](http://gnaixx.cc/2016/04/07/ndk-array/)
 - [C/C++ 访问 Java 变量和方法](http://gnaixx.cc/2016/04/08/ndk-invoke-java-method_field/)
-- [JNI 局部引用、全局引用和弱全局引用](http://gnaixx.cc/2016/04/08/ndk-local_global_weak-reference/)
